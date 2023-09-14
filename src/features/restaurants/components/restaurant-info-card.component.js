@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components/native";
 import { Text } from "react-native";
 import { Card } from "react-native-paper";
+import { SvgXml } from "react-native-svg";
+
+import star from "../../../../assets/star";
 
 //設定card css
 const RestaurantCard = styled(Card)`
@@ -28,6 +31,11 @@ const Info = styled.View`
   padding: ${(props) => props.theme.space[3]};
 `;
 
+const Rating = styled.View`
+  flex-direction: row;
+  padding-top: ${(props) => props.theme.space[2]};
+  padding-bottom: ${(props) => props.theme.space[2]};
+`;
 
 // restaurant為object物件並宣告其property value
 export const RestaurantInfoCard = ({ restaurant = {} }) => {
@@ -42,14 +50,23 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
       rating = 4,
       isClosedTemporarily,
     } = restaurant;
+
+    // 宣告陣列
+    const ratingArray = Array.from(new Array(Math.floor(rating)));
   
     return (
-    <RestaurantCard elevation={5}>
-      <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
-      <Info>
-        <Title>{name}</Title>
-        <Address>{address}</Address>
-      </Info>
+      <RestaurantCard elevation={5}>
+        <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
+        <Info>
+          <Title>{name}</Title>
+          <Rating>
+            {ratingArray.map(() => (
+              // xml引入svg圖片
+              <SvgXml xml={star} width={20} height={20} />
+            ))}
+          </Rating>
+          <Address>{address}</Address>
+        </Info>
     </RestaurantCard>
     );
   };
