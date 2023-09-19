@@ -75,20 +75,24 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
       <RestaurantCard elevation={5}>
         <RestaurantCardCover key={name} source={{ uri: photos[0] }} />
         <Info>
-          <Section>
-            <Title>{name}</Title>
-            <SectionEnd>
-              {isClosedTemporarily && (
-                <Text variant="label" style={{ color: "red" }}>
-                  CLOSED TEMPORARILY
-                </Text>
-              )}
-              <View style={{ paddingLeft: 16 }} />
-              {isOpenNow && <SvgXml xml={open} width={20} height={20} />}
-              <View style={{ paddingLeft: 16 }} />
-              <Image style={{ width: 15, height: 15 }} source={{ uri: icon }} />
-            </SectionEnd>
-          </Section>
+        <Section>
+          <Rating>
+            {ratingArray.map(() => (
+              <SvgXml xml={star} width={20} height={20} />
+            ))}
+          </Rating>
+          <SectionEnd>
+            {isClosedTemporarily && (
+              <Text variant="label" style={{ color: "red" }}>
+                CLOSED TEMPORARILY
+              </Text>
+            )}
+            <View style={{ paddingLeft: 16 }} />
+            {isOpenNow && <SvgXml xml={open} width={20} height={20} />}
+            <View style={{ paddingLeft: 16 }} />
+            <Image style={{ width: 15, height: 15 }} source={{ uri: icon }} />
+          </SectionEnd>
+        </Section>
           <Address>{address}</Address>
         </Info>
     </RestaurantCard>
