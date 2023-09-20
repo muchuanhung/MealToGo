@@ -4,6 +4,8 @@ import { Text } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+
 
 import { SafeArea } from "./src/utils/safe-area.component";
 import { RestaurantsScreen } from "./src/features/restaurants/components/screens/restaurants.screen";
@@ -27,11 +29,6 @@ const Map = () => (
     <Text>Map</Text>
   </SafeArea>
 );
-const Other = () => (
-  <SafeArea>
-    <Text>Other</Text>
-  </SafeArea>
-);
 
 // Define custom font
  export default function App() {
@@ -53,11 +50,30 @@ const Other = () => (
     <>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <Tab.Navigator>
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ color, size }) => {
+                  let iconName;
+
+                  if (route.name === "Restaurants") {
+                    iconName = "md-restaurant";
+                  } else if (route.name === "Settings") {
+                    iconName = "md-settings";
+                  } else if (route.name === "Map") {
+                    iconName = "md-map";
+                  }
+
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+              })}
+              tabBarOptions={{
+                activeTintColor: "tomato",
+                inactiveTintColor: "gray",
+              }}
+          >
               <Tab.Screen name="Restaurants" component={RestaurantsScreen} />
               <Tab.Screen name="Map" component={Map} />
               <Tab.Screen name="Settings" component={Settings} />
-              <Tab.Screen name="Other" component={Other} />
           </Tab.Navigator>
         </NavigationContainer>
       </ThemeProvider>
