@@ -17,6 +17,14 @@ const SearchContainer = styled.View`
  padding: ${(props) => props.theme.space[3]};
 `;
 
+// 把inline style的設定抽出來
+const RestaurantList = styled(FlatList).attrs({
+  contentContainerStyle: {
+    padding: 16,
+  },
+})``;
+
+//卡片外的container容器
 const RestaurantListContainer = styled.View`
   flex: 1;
   padding: ${(props) => props.theme.space[3]};
@@ -38,7 +46,7 @@ export const RestaurantsScreen = () => {
           />
         </SearchContainer>
         <RestaurantListContainer>
-        <FlatList
+        <RestaurantList
       data={[
         { name: 1 },
         { name: 2 },
@@ -61,7 +69,6 @@ export const RestaurantsScreen = () => {
         </Spacer>
       )}
       keyExtractor={(item) => item.name}
-      contentContainerStyle={{ padding: 16 }}
     />
         </RestaurantListContainer>
       </SafeArea>
