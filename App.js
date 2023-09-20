@@ -19,6 +19,13 @@ import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
 // 宣告bottom tab section value
 const Tab = createBottomTabNavigator();
 
+// 宣告icon樣式
+const TAB_ICON = {
+  Restaurants: "md-restaurant",
+  Map: "md-map",
+  Settings: "md-settings",
+};
+
 const Settings = () => (
   <SafeArea>
     <Text>Settings</Text>
@@ -29,6 +36,16 @@ const Map = () => (
     <Text>Map</Text>
   </SafeArea>
 );
+
+// Build up screen option
+const createScreenOptions = ({ route }) => {
+  const iconName = TAB_ICON[route.name];
+  return {
+    tabBarIcon: ({ size, color }) => (
+      <Ionicons name={iconName} size={size} color={color} />
+    ),
+  };
+};
 
 // Define custom font
  export default function App() {
@@ -50,27 +67,13 @@ const Map = () => (
     <>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ color, size }) => {
-                  let iconName;
-
-                  if (route.name === "Restaurants") {
-                    iconName = "md-restaurant";
-                  } else if (route.name === "Settings") {
-                    iconName = "md-settings";
-                  } else if (route.name === "Map") {
-                    iconName = "md-map";
-                  }
-
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-              })}
+          <Tab.Navigator
+              screenOptions={createScreenOptions}
               tabBarOptions={{
                 activeTintColor: "tomato",
                 inactiveTintColor: "gray",
               }}
-          >
+            >
               <Tab.Screen name="Restaurants" component={RestaurantsScreen} />
               <Tab.Screen name="Map" component={Map} />
               <Tab.Screen name="Settings" component={Settings} />
