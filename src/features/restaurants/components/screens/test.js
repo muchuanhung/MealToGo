@@ -1,41 +1,45 @@
-import React, { useContext } from "react";
-import { Searchbar } from "react-native-paper";
-import { FlatList } from "react-native";
-import styled from "styled-components/native";
+import React, { useState, createContext, useEffect, useMemo } from "react";
 
-import { SafeArea } from "../../../components/utility/safe-area.component";
-import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
-import { Spacer } from "../../../components/spacer/spacer.component";
+import {
+  restaurantsRequest,
+  restaurantsTransform,
+} from "./restaurants.service";
 
-import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+export const RestaurantsContext = createContext();
 
-const SearchContainer = styled.View`
-  padding: ${(props) => props.theme.space[3]};
-`;
+export const RestaurantsContextProvider = ({ children }) => {
+  const [restaurants, setRestaurants] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-const RestaurantList = styled(FlatList).attrs({
-  contentContainerStyle: {
-    padding: 16,
-  },
-})``;
+  const retrieveRestaurants = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      restaurantsRequest()
+        .then(restaurantsTransform)
+        .then((results) => {
+          setIsLoading(false);
+          setRestaurants(results);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          setError(err);
+        });
+    }, 2000);
+  };
+  useEffect(() => {
+    retrieveRestaurants();
+  }, []);
 
-export const RestaurantsScreen = () => {
-  const restaurantContext = useContext(RestaurantsContext);
-  console.log(restaurantContext)
   return (
-    <SafeArea>
-      <SearchContainer>
-        <Searchbar />
-      </SearchContainer>
-      <RestaurantList
-        data={restaurantContext.restaurants}
-        renderItem={() => (
-          <Spacer position="bottom" size="large">
-            <RestaurantInfoCard />
-          </Spacer>
-        )}
-        keyExtractor={(item) => item.name}
-      />
-    </SafeArea>
+    <RestaurantsContext.Provider
+      value={{
+        restaurants,
+        isLoading,
+        error,
+      }}
+    >
+      {children}
+    </RestaurantsContext.Provider>
   );
 };
