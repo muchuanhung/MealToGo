@@ -3,6 +3,8 @@ import { Searchbar } from 'react-native-paper';
 // import react native 原生UI套件
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
+// import react loading 原生UI套件
+import { ActivityIndicator, Colors } from "react-native-paper";
 
 import { RestaurantInfoCard } from "../restaurant-info-card.component";
 import { SafeArea } from "../../../../utils/safe-area.component";
@@ -21,12 +23,26 @@ const RestaurantList = styled(FlatList).attrs({
   },
 })``;
 
+// loading animation css設定
+const Loading = styled(ActivityIndicator)`
+  margin-left: -25px;
+`;
+const LoadingContainer = styled.View`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
+
 
 export const RestaurantsScreen = () => {
   const { isLoading, error, restaurants } = useContext(RestaurantsContext);
-  console.log(error);
   return (
     <SafeArea>
+      {isLoading && (
+        <LoadingContainer>
+          <Loading size={50} animating={true} />
+        </LoadingContainer>
+      )}
       <SearchContainer>
         <Searchbar />
       </SearchContainer>
